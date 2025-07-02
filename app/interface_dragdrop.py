@@ -6,6 +6,7 @@ Interface Gráfica Moderna, Modular e Profissional para Upload e Análise de PDF
 - Modular: DropZoneFrame, ProgressFrame, CardFrame, ResultFrame
 - Integração com AnalisadorPDF
 """
+# Interface gráfica drag-and-drop para seleção e análise de arquivos PDF financeiros.
 import os
 import sys
 import threading
