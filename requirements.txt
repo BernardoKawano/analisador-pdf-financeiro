@@ -1,0 +1,3 @@
+PyPDF2
+TkinterDnD2
+tk 
