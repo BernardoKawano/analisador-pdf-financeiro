@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from collections import defaultdict
 from datetime import datetime
+import csv
 
 try:
     import PyPDF2  # type: ignore
@@ -373,6 +374,24 @@ def main():
             f.write(relatorio)
         
         print(f"\nRelatório salvo em: {caminho_relatorio}")
+
+        try:
+            caminho_csv = Path("results") / (Path(caminho_pdf).stem + "_relatorio.csv")
+            totais_diarios = analisador.calcular_totais_diarios()
+            with open(caminho_csv, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';')
+                writer.writerow(["Data", "Valor Demonstrativo", "Valor Funarpen", "Valor ISSQN", "Total Liquido"])
+                for total in totais_diarios:
+                    writer.writerow([
+                        total.data,
+                        f"{total.demonstrativos:.2f}".replace('.', ','),
+                        f"{total.funarpen:.2f}".replace('.', ','),
+                        f"{total.issqn:.2f}".replace('.', ','),
+                        f"{total.valor_liquido:.2f}".replace('.', ',')
+                    ])
+            print(f"Planilha CSV salva em: {caminho_csv}")
+        except Exception as e:
+            print(f"Erro ao salvar planilha CSV: {e}")
     else:
         print("Falha na análise do PDF.")
         sys.exit(1)

@@ -239,6 +239,28 @@ class DragDropPDFApp(tk.Frame):
         Path("results").mkdir(exist_ok=True)
         with open(self.relatorio_path, "w", encoding="utf-8") as f:
             f.write(self.relatorio)
+
+        # --- NOVO: Exporta planilha CSV ---
+        if AnalisadorPDF and self.selected_file:
+            try:
+                import csv
+                caminho_csv = Path("results") / f"{nome_arquivo}_relatorio.csv"
+                totais_diarios = analisador.calcular_totais_diarios()
+                with open(caminho_csv, 'w', newline='', encoding='utf-8') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';')
+                    writer.writerow(["Data", "Valor Demonstrativo", "Valor Funarpen", "Valor ISSQN", "Total Liquido"])
+                    for total in totais_diarios:
+                        writer.writerow([
+                            total.data,
+                            f"{total.demonstrativos:.2f}".replace('.', ','),
+                            f"{total.funarpen:.2f}".replace('.', ','),
+                            f"{total.issqn:.2f}".replace('.', ','),
+                            f"{total.valor_liquido:.2f}".replace('.', ',')
+                        ])
+                print(f"Planilha CSV salva em: {caminho_csv}")
+            except Exception as e:
+                print(f"Erro ao salvar planilha CSV: {e}")
+
         self.set_state("result")
 
 def main():
