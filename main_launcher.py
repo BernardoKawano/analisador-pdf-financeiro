@@ -1,3 +1,5 @@
+# main_launcher.py
+# Ponto de entrada principal da aplicação Analisador PDF Financeiro.
 import subprocess
 import sys
 import os
