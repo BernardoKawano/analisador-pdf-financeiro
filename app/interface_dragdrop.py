@@ -15,7 +15,7 @@ from tkinter import ttk, messagebox, filedialog
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 try:
-    from app.sergio import AnalisadorPDF
+    from app.analise_pdf import AnalisadorPDF
 except ImportError:
     AnalisadorPDF = None  # Simulação se não existir
 
