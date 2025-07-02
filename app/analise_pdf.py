@@ -1,3 +1,6 @@
+# analise_pdf.py
+# Módulo responsável pela análise e processamento de PDFs financeiros.
+# Realiza extração de valores, cálculos e geração de relatórios estruturados.
 import re
 import sys
 from pathlib import Path
