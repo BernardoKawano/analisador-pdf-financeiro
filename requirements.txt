@@ -1,3 +1,7 @@
 PyPDF2
-TkinterDnD2
-tk 
+flet>=0.21.0
+flet-lottie>=0.1.0
+PyMuPDF>=1.23.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+Pillow>=10.0.0 

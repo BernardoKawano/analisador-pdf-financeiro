@@ -244,7 +244,7 @@ class AnalisadorPDF:
             'valor_liquido': valor_liquido
         }
     
-    def gerar_relatorio(self) -> str:
+    def gerar_relatorio(self, caminho_pdf=None) -> str:
         """Gera relatório estruturado completo"""
         totais = self.calcular_totais()
         totais_diarios = self.calcular_totais_diarios()
@@ -332,7 +332,33 @@ class AnalisadorPDF:
         relatorio.append("")
         relatorio.append("=" * 80)
         
-        return "\n".join(relatorio)
+        relatorio_str = "\n".join(relatorio)
+
+        # Salva arquivos se caminho_pdf for fornecido
+        if caminho_pdf:
+            nome_arquivo_relatorio = Path(caminho_pdf).stem + "_relatorio.txt"
+            caminho_relatorio = Path("results") / nome_arquivo_relatorio
+            Path("results").mkdir(exist_ok=True)
+            with open(caminho_relatorio, 'w', encoding='utf-8') as f:
+                f.write(relatorio_str)
+            try:
+                caminho_csv = Path("results") / (Path(caminho_pdf).stem + "_relatorio.csv")
+                total_liquido_geral = sum(t.valor_liquido for t in totais_diarios)
+                with open(caminho_csv, 'w', newline='', encoding='utf-8') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';')
+                    writer.writerow(["Data", "Valor Demonstrativo", "Valor Funarpen", "Valor ISSQN", "Total Liquido", "Total Líquido Geral"])
+                    for idx, total in enumerate(totais_diarios):
+                        writer.writerow([
+                            total.data,
+                            f"{total.demonstrativos:.2f}",
+                            f"{total.funarpen:.2f}",
+                            f"{total.issqn:.2f}",
+                            f"{total.valor_liquido:.2f}",
+                            f"{total_liquido_geral:.2f}" if idx == 0 else ""
+                        ])
+            except Exception as e:
+                print(f"Erro ao salvar planilha CSV: {e}")
+        return relatorio_str
 
 def main():
     """Função principal do programa"""
@@ -360,38 +386,10 @@ def main():
     
     if analisador.analisar_pdf():
         # Gera e exibe relatório
-        relatorio = analisador.gerar_relatorio()
+        relatorio = analisador.gerar_relatorio(caminho_pdf)
         print(relatorio)
         
-        # Salva relatório em arquivo
-        nome_arquivo_relatorio = Path(caminho_pdf).stem + "_relatorio.txt"
-        caminho_relatorio = Path("results") / nome_arquivo_relatorio
-        
-        # Cria a pasta results se não existir
-        Path("results").mkdir(exist_ok=True)
-        
-        with open(caminho_relatorio, 'w', encoding='utf-8') as f:
-            f.write(relatorio)
-        
-        print(f"\nRelatório salvo em: {caminho_relatorio}")
-
-        try:
-            caminho_csv = Path("results") / (Path(caminho_pdf).stem + "_relatorio.csv")
-            totais_diarios = analisador.calcular_totais_diarios()
-            with open(caminho_csv, 'w', newline='', encoding='utf-8') as csvfile:
-                writer = csv.writer(csvfile, delimiter=';')
-                writer.writerow(["Data", "Valor Demonstrativo", "Valor Funarpen", "Valor ISSQN", "Total Liquido"])
-                for total in totais_diarios:
-                    writer.writerow([
-                        total.data,
-                        f"{total.demonstrativos:.2f}".replace('.', ','),
-                        f"{total.funarpen:.2f}".replace('.', ','),
-                        f"{total.issqn:.2f}".replace('.', ','),
-                        f"{total.valor_liquido:.2f}".replace('.', ',')
-                    ])
-            print(f"Planilha CSV salva em: {caminho_csv}")
-        except Exception as e:
-            print(f"Erro ao salvar planilha CSV: {e}")
+        print(f"\nRelatório salvo em: results/{Path(caminho_pdf).stem}_relatorio.txt")
     else:
         print("Falha na análise do PDF.")
         sys.exit(1)

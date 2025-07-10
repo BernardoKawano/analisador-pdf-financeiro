@@ -1,85 +1,101 @@
-# 🚀 Como Usar - Interface Gráfica
+# Como Usar o Analisador de PDF - LumaLector
 
-## Instalação Rápida
+## Instalação
 
-1. **Instalar dependências:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1. Instalar dependências
+```bash
+pip install -r requirements.txt
+```
 
-2. **Executar interface:**
-   ```bash
-   python interface_simples.py
-   ```
+### 2. Executar a aplicação
+```bash
+python main_flet.py
+```
 
-## 📋 Passo a Passo
+## Funcionalidades Implementadas
 
-### 1. Abrir a Interface
-- Execute `python interface_simples.py`
-- A janela "Analisador de PDF" aparecerá
+### ✅ Interface Gráfica Completa (Flet)
+- 7 telas navegáveis com identidade visual personalizada
+- Navegação com botões "Home" e "Voltar"
+- Design responsivo com paleta de cores oficial
 
-### 2. Selecionar Arquivo
-- Clique no botão **"📂 Selecionar Arquivo PDF"**
-- Navegue até a pasta onde está seu PDF
-- Selecione o arquivo e clique em "Abrir"
+### ✅ Análise de PDF
+- Validação robusta de arquivos PDF
+- Extração de valores financeiros (líquido, demonstrativo, Funarpen, ISSQN)
+- Identificação de datas e número de páginas
+- Processamento com feedback visual
 
-### 3. Analisar PDF
-- O nome do arquivo aparecerá na interface
-- Clique no botão **"🔍 Analisar PDF"**
-- Aguarde a barra de progresso (pode demorar alguns segundos)
+### ✅ Navegação e Fluxo
+- **Tela 1**: Boas-vindas com opções principais
+- **Tela 2**: Upload de arquivo PDF
+- **Tela 3**: Confirmação do documento com miniatura
+- **Tela 4**: Processamento com animação Lottie
+- **Tela 5**: Resumo da análise com valores extraídos
+- **Tela 6**: Opções de exportação
+- **Tela 7**: Histórico de análises realizadas
 
-### 4. Ver Resultados
-- Os resultados aparecerão na área de texto
-- Uma mensagem de sucesso será exibida
-- O arquivo .txt será salvo automaticamente na pasta `results/`
+### ✅ Exportação de Dados
+- **TXT**: Relatório formatado em texto
+- **CSV**: Dados estruturados para importação
+- **Excel**: Planilha com formatação profissional
 
-### 5. Acessar Arquivo
-- Clique em **"📁 Abrir Pasta de Resultados"**
-- O explorador abrirá na pasta com o relatório .txt
+### ✅ Histórico Persistente
+- Salva análises realizadas em `historico.json`
+- Visualização cronológica das análises
+- Acesso rápido a resultados anteriores
 
-## 🔧 Botões da Interface
+### ✅ Funcionalidades Adicionais
+- Cópia de valores individuais para área de transferência
+- Validação de integridade de arquivos PDF
+- Geração de miniaturas (quando PyMuPDF disponível)
+- Feedback visual com SnackBars informativos
 
-| Botão | Função |
-|-------|--------|
-| 📂 Selecionar Arquivo PDF | Escolhe o arquivo PDF para análise |
-| 🔍 Analisar PDF | Inicia a análise do arquivo selecionado |
-| 🗑️ Limpar | Limpa tudo e reinicia a interface |
-| 📁 Abrir Pasta de Resultados | Abre a pasta onde estão os relatórios |
+## Personalização
 
-## 📊 O que a Análise Faz
+### Cliente
+Para personalizar o nome do cliente, edite a linha 19 em `main_flet.py`:
+```python
+NOME_CLIENTE = "Seu Nome Aqui"
+```
 
-1. **Lê todas as páginas** do PDF
-2. **Filtra páginas** com o campo bancário específico
-3. **Extrai valores** demonstrativos, FUNARPEN e ISSQN
-4. **Calcula totais diários** e consolidados
-5. **Gera relatório** completo em arquivo .txt
+### Logo
+Substitua o arquivo `images/Logotipo-LumaLector.png` pelo logo desejado.
 
-## ❗ Solução de Problemas
+### Cores
+As cores da identidade visual podem ser ajustadas nas linhas 8-15 de `main_flet.py`.
 
-### Erro: "Arquivo não encontrado"
-- Verifique se o caminho do arquivo está correto
-- Certifique-se de que o arquivo existe
+## Arquivos Gerados
 
-### Erro: "Campo bancário não encontrado"
-- O PDF deve conter: "Ag./Cod. Cedente: 3162/730791-8"
-- Verifique se é o PDF correto
+- `results/`: Diretório com relatórios TXT e CSV
+- `historico.json`: Histórico de análises
+- Arquivos temporários de miniatura (pasta temp do sistema)
 
-### Interface não abre
-- Verifique se Python está instalado
-- Execute: `pip install PyPDF2`
+## Dependências Opcionais
 
-### Análise demora muito
-- PDFs grandes podem demorar alguns minutos
-- Aguarde a barra de progresso terminar
+### PyMuPDF (Recomendado)
+Para geração de miniaturas reais dos PDFs:
+```bash
+pip install PyMuPDF
+```
 
-## 📁 Arquivos Gerados
+### Pandas + OpenPyXL (Recomendado)  
+Para exportação em Excel:
+```bash
+pip install pandas openpyxl
+```
 
-- **Relatório .txt**: `results/{nome_pdf}_relatorio.txt`
-- **Conteúdo**: Valores, totais diários, estatísticas completas
+## Solução de Problemas
 
-## 💡 Dicas
+### Erro ao carregar PDF
+- Verifique se o arquivo não está corrompido
+- Tamanho máximo: 100MB
+- Formato suportado: PDF válido
 
-- Use a interface gráfica para facilitar o uso
-- Os relatórios são salvos automaticamente
-- Você pode analisar múltiplos PDFs sem fechar a interface
-- Use o botão "Limpar" para começar uma nova análise 
+### Funcionalidades indisponíveis
+- Miniaturas: Instale PyMuPDF
+- Exportação Excel: Instale pandas e openpyxl
+
+### Navegação
+- **Home**: Sempre retorna à tela inicial
+- **Voltar**: Retorna à tela anterior no fluxo
+- **Voltar ao Início**: Limpa dados e volta ao menu principal 
